@@ -23,4 +23,21 @@ app.post("/api/auth/register", async (req, res) => {
   return res.json({ user });
 });
 
+//ユーザーログインAPI
+app.post("/api/auth/register", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return res.status(401).json({ error: "そのユーザーは存在しません。" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.passwerd);
+  if (isPasswordValid) {
+    return res.status(401).json({ error: "そのパスワードは間違っています。" });
+  }
+
+  return res.json({ user });
+});
+
 app.listen(PORT, () => console.log(`server is runing on Port ${PORT}`));
