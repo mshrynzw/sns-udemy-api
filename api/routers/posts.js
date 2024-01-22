@@ -29,15 +29,15 @@ router.post("/post", async (req, res) => {
 });
 
 // 最新つぶやき投稿用API
-router.post("/get_lastest_post", async (req, res) => {
+router.get("/get_lastest_post", async (req, res) => {
   try {
     const latestPosts = await prisma.post.findMany({
       take: 10,
-      orderBy: { creaetedAt: "desc" },
+      orderBy: { createdAt: "desc" },
     });
     return res.json(latestPosts);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "サーバーエラーです。" });
   }
 });
