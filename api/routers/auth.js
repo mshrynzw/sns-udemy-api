@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 // 新規ユーザー登録API
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
+  const defaultIconImage = generateIdenticon(email);
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
@@ -18,9 +19,12 @@ router.post("/register", async (req, res) => {
       profile: {
         create: {
           bio: "はじめまして",
-          profileImageUrl: "sample.png",
+          profileImageUrl: defaultIconImage,
         },
       },
+    },
+    include: {
+      profile: true,
     },
   });
 
