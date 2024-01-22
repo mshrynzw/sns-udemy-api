@@ -19,6 +19,9 @@ router.post("/post", async (req, res) => {
         content,
         authorId: 1,
       },
+      include: {
+        author: true,
+      },
     });
 
     res.status(201).json(newPost);
@@ -34,6 +37,9 @@ router.get("/get_lastest_post", async (req, res) => {
     const latestPosts = await prisma.post.findMany({
       take: 10,
       orderBy: { createdAt: "desc" },
+      include: {
+        author: true,
+      },
     });
     return res.json(latestPosts);
   } catch (err) {
